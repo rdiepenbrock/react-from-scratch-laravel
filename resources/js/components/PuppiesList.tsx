@@ -1,35 +1,29 @@
-import {type Puppy} from "@/types";
+import { PaginatedResponse, type Puppy} from "@/types";
 import {LikeToggle} from "./LikeToggle";
-import {Dispatch, SetStateAction} from "react";
+import { Pagination } from '@/components/pagination';
 
-export function PuppiesList({
-                                searchQuery,
-                                puppies,
-                                setPuppies,
-                            }: {
-    searchQuery: string;
-    puppies: Puppy[];
-    setPuppies: Dispatch<SetStateAction<Puppy[]>>;
-}) {
+export function PuppiesList({ puppies }: { puppies: PaginatedResponse<Puppy> }) {
     return (
-        <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {
-                puppies
-                    .filter(pup => pup.trait.toLowerCase().includes(searchQuery.toLowerCase()))
-                    .map((puppy) => (
-                        <PuppyCard key={puppy.id} puppy={puppy} setPuppies={setPuppies}/>
-                    ))
-            }
-        </ul>
+        <>
+            <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {
+                    puppies.data
+                        .map((puppy) => (
+                            <PuppyCard key={puppy.id} puppy={puppy} />
+                        ))
+                }
+            </ul>
+            <Pagination className="mt-6" meta={puppies.meta} links={puppies.links} />
+        </>
+
     );
 }
 
 type PuppyCardProps = {
     puppy: Puppy;
-    setPuppies: Dispatch<SetStateAction<Puppy[]>>;
 }
 
-function PuppyCard({ puppy, setPuppies }: PuppyCardProps) {
+function PuppyCard({ puppy }: PuppyCardProps) {
     return (
         <li
             key={puppy.id}
@@ -46,7 +40,7 @@ function PuppyCard({ puppy, setPuppies }: PuppyCardProps) {
                     <span className="text-slate-300">·</span>
                     <p className="text-slate-500">{puppy.trait}</p>
                 </div>
-                <LikeToggle puppy={puppy} setPuppies={setPuppies}/>
+                <LikeToggle puppy={puppy} />
             </div>
         </li>
     )

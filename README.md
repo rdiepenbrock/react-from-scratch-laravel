@@ -1,5 +1,9 @@
 # Laravel + React Starter Kit
 
+From Laracasts:
+
+https://laracasts.com/series/react-the-laravel-way
+
 ## Introduction
 
 Our React starter kit provides a robust, modern starting point for building Laravel applications with a React frontend using [Inertia](https://inertiajs.com).
