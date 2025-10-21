@@ -8,6 +8,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { ImageUploadPreview } from '@/components/ImageUploadPreview';
+import { route } from 'ziggy-js';
 
 export function PuppyUpdate({ puppy }: { puppy: Puppy }) {
     const { data, setData, errors, post, processing } = useForm({

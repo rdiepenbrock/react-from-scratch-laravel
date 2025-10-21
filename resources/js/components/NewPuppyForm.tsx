@@ -1,6 +1,7 @@
 import { useForm } from '@inertiajs/react';
 import { useRef } from 'react';
 import { ImageUploadPreview } from '@/components/ImageUploadPreview';
+import { route } from 'ziggy-js';
 
 export function NewPuppyForm({mainRef} : { mainRef?: React.RefObject<HTMLElement> }) {
     const { post, setData, data, errors, reset, processing } = useForm({
