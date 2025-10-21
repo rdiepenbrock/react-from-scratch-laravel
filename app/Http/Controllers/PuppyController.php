@@ -69,6 +69,67 @@ class PuppyController extends Controller
         return redirect()->route('home', ['page' => 1])->with('success', 'Puppy created successfully.');
     }
 
+    public function destroy(Request $request, Puppy $puppy)
+    {
+        sleep(2);
+
+        $imagePath = str_replace('/storage', '', $puppy->image_url);
+
+        if ($request->user()->cannot('delete', $puppy)) {
+            return back()
+                ->withErrors(['error' => 'You do not have permission to delete this puppy.']);
+        }
+
+        $puppy->delete();
+
+        if ($imagePath && Storage::disk('public')->exists($imagePath)) {
+            Storage::disk('public')->delete($imagePath);
+        }
+
+        return redirect()
+            ->route('home', ['page' => 1])
+            ->with('success', 'Puppy deleted successfully.');
+    }
+
+    public function update(Request $request, Puppy $puppy)
+    {
+        sleep(2);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'trait' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+        ]);
+
+        if ($request->hasFile('image')) {
+
+            $oldImagePath = str_replace('/storage', '', $puppy->image_url);
+
+            $optimized = (new OptimizeWebpImageAction())->handle($request->file('image'));
+
+            $path = 'puppies/' . $optimized['fileName'];
+
+            $stored = Storage::disk('public')->put($path, $optimized['webpString']);
+
+            if (!$stored) {
+                return back()->withErrors(['image' => 'Failed to upload image.']);
+            }
+
+            $puppy->image_url = Storage::url($path);
+
+            if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
+                Storage::disk('public')->delete($oldImagePath);
+            }
+        }
+
+        $puppy->name = $request->name;
+        $puppy->trait = $request->trait;
+
+        $puppy->save();
+
+        return back()->with('success', 'Puppy updated successfully.');
+    }
+
     public function like(Request $request, Puppy $puppy)
     {
         $puppy->likedBy()->toggle($request->user()->id);

@@ -1,5 +1,6 @@
 import { useForm } from '@inertiajs/react';
 import { useRef } from 'react';
+import { ImageUploadPreview } from '@/components/ImageUploadPreview';
 
 export function NewPuppyForm({mainRef} : { mainRef?: React.RefObject<HTMLElement> }) {
     const { post, setData, data, errors, reset, processing } = useForm({
@@ -69,6 +70,7 @@ export function NewPuppyForm({mainRef} : { mainRef?: React.RefObject<HTMLElement
                                    onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)}
                             />
                             {errors.image && <p className="mt-1 text-xs text-red-500">{errors.image}</p>}
+                            <ImageUploadPreview className="self-start" source={data.image} />
                         </fieldset>
                     </div>
 

@@ -28,6 +28,11 @@ export interface SharedData {
     auth: Auth;
     ziggy: Config & { location: string };
     sidebarOpen: boolean;
+    flash: {
+        success?: string;
+        warning?: string;
+        info?: string;
+    }
     [key: string]: unknown;
 }
 
@@ -49,6 +54,10 @@ export interface Puppy {
     imageUrl: string;
     user: Pick<User, 'id' | 'name'>;
     likedBy: User['id'][];
+    can: {
+        delete: boolean;
+        update: boolean;
+    }
 }
 
 export interface Filters {

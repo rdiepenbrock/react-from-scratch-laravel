@@ -1,6 +1,8 @@
 import { PaginatedResponse, type Puppy} from "@/types";
 import {LikeToggle} from "./LikeToggle";
 import { Pagination } from '@/components/pagination';
+import { PuppyDelete } from '@/components/puppy-delete';
+import { PuppyUpdate } from '@/components/puppy-update';
 
 export function PuppiesList({ puppies }: { puppies: PaginatedResponse<Puppy> }) {
     return (
@@ -21,14 +23,22 @@ export function PuppiesList({ puppies }: { puppies: PaginatedResponse<Puppy> }) 
 
 type PuppyCardProps = {
     puppy: Puppy;
-}
+};
 
 function PuppyCard({ puppy }: PuppyCardProps) {
     return (
         <li
             key={puppy.id}
-            className="overflow-clip rounded-lg bg-white shadow-md ring ring-black/5 hover:-translate-y-0.5"
+            className="relative overflow-clip rounded-lg bg-white shadow-md ring ring-black/5 hover:-translate-y-0.5"
         >
+            {puppy.can.update && (
+                <div className="absolute top-2 right-2">
+                    <div className="flex gap-2 items-center">
+                        <PuppyUpdate puppy={puppy} />
+                        <PuppyDelete puppy={puppy} />
+                    </div>
+                </div>
+            )}
             <img
                 className="aspect-square object-cover"
                 alt={puppy.name}
